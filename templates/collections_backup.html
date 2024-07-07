@@ -1,0 +1,99 @@
+{% extends 'layouts/main.html' %}
+{% load static %}
+
+{% block body %}
+
+<!-- product section -->
+<section class="product_section layout_padding">
+   <div class="container">
+      <div class="heading_container heading_center">
+         <h2>
+            Our <span>Collections</span>
+         </h2>
+      </div>
+      <div class="row">
+         {% for category in categories %}
+         <div class="col-sm-6 col-md-4 col-lg-4">
+            <div class="box">
+               <div class="option_container">
+                  <div class="options">
+                     {% if category.slug %}
+                     <a href="{% url 'category_detail' category.slug %}" class="option1">
+                        {{ category.name }}
+                     </a>
+                     {% else %}
+                     <span class="option1">{{ category.name }}</span>
+                     {% endif %}
+                     <!-- You can add a "Buy Now" link or button if needed -->
+                  </div>
+               </div>
+               {% if category.product_set.exists %}
+               <!-- Displaying the first product's image and details -->
+               <div class="img-box">
+                  <img src="{{ category.product_set.first.images.first.image.url }}" alt="Product Image">
+               </div>
+               <div class="detail-box">
+                  <h5>
+                     {{ category.product_set.first.name }}
+                  </h5>
+                  <h6>
+                     ${{ category.product_set.first.price }}
+                  </h6>
+               </div>
+               {% endif %}
+            </div>
+         </div>
+         {% endfor %}
+      </div>
+      <div class="btn-box">
+         <a href="#">
+            View All products
+         </a>
+      </div>
+   </div>
+</section>
+<!-- end product section -->
+
+{% endblock body %}
+
+
+<!-- Category Details Section -->
+<section class="category_detail_section layout_padding">
+   <div class="container">
+       <div class="row">
+           <div class="col-md-12">
+               <div class="heading_container">
+                   <h2>{{ category.name }}</h2>
+                   <p>{{ category.description }}</p>
+               </div>
+           </div>
+       </div>
+       <div class="row">
+           {% for product in products %}
+           <div class="col-sm-6 col-md-4 col-lg-3">
+               <div class="product_box">
+                   <div class="img-box">
+                       <img src="{{ product.images.first.image.url }}" alt="{{ product.name }}">
+                   </div>
+                   <div class="detail-box">
+                       <h5>{{ product.name }}</h5>
+                       <h6>${{ product.price }}</h6>
+                       <a href="#" class="btn btn-primary">View Details</a>
+                   </div>
+               </div>
+           </div>
+           {% endfor %}
+       </div>
+   </div>
+</section>
+<!-- End Category Details Section -->
+
+
+<form method="post" action="{% url 'admin_panel:edit_category' category.id %}">
+   {% csrf_token %}
+   <div class="form-group">
+       <label for="name">Name</label>
+       <input type="text" name="name" class="form-control" value="{{ category.name }}" required>
+   </div>
+   <button type="submit" class="btn btn-primary">Save Changes</button>
+</form>

@@ -1,0 +1,75 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Products</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.scss' %}">
+    <style>
+        .sidebar {
+          height: 100%;
+          width: 200px;
+          position: fixed;
+          top: 0;
+          left: 0;
+          background-color: #343a40;
+          padding-top: 20px;
+        }
+        .sidebar a {
+          padding: 10px 15px;
+          text-decoration: none;
+          font-size: 18px;
+          color: white;
+          display: block;
+        }
+        .sidebar a:hover {
+          background-color: #575d63;
+        }
+        .main-content {
+          margin-left: 200px;
+          padding: 20px;
+        }
+      </style>
+</head>
+<body>
+    <div class="sidebar">
+        <a href="{% url 'admin_panel:dashboard' %}">Dashboard</a>
+        <a href="{% url 'admin_panel:manage_users' %}">Manage Users</a>
+        <a href="{% url 'admin_panel:manage_categories' %}">Manage Categories</a>
+        <a href="{% url 'admin_panel:manage_products' %}">Manage Products</a>
+        <a href="{% url 'admin_panel:logout' %}">Logout</a>
+      </div>
+    <div class="main-content">
+        <h1>Manage Products</h1>
+        <a href="{% url 'admin_panel:add_product' %}" class="btn btn-primary">Add Product</a>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Category</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in products %}
+                <tr>
+                    <td>{{ product.id }}</td>
+                    <td>{{ product.name }}</td>
+                    <td>{{ product.price }}</td>
+                    <td>{{ product.category.name }}</td>
+                    <td>
+                        <a href="{% url 'admin_panel:edit_product' product.id %}" class="btn btn-warning">Edit</a>
+                        <a href="{% url 'admin_panel:delete_product' product.id %}" class="btn btn-danger">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
